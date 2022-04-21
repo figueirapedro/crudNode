@@ -5,8 +5,9 @@ const mongo = require("mongodb");
 const mongoose = require("mongoose");
 const ProdutoModel = require("./produtoModel.js");
 const path = require('path');
+const port = 3000;
 
-const DbString = "";
+const DbString = "mongodb://127.0.0.1:27017";
 
 app.get("/listar", () => {
     res.sendFile(path.join(__dirname + "/static/x.html"));
@@ -19,9 +20,14 @@ app.get("/cadastrar", () => {
 app.get("/atualizar", () => {
     res.sendFile(path.join(__dirname + "/static/x.html"));
 })
-app.get("/v1/estoque", (req, res) => {
-    await mongoose.connect(DbString);
 
+mongoose.connect(DbString,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+
+);app.get("/v1/estoque", async (req, res) => {
     const foods = await ProdutoModel.find({});
 
   try {
@@ -31,9 +37,7 @@ app.get("/v1/estoque", (req, res) => {
   }
 })
 
-app.post("/v1/estoque", (req, res) => {
-    await mongoose.connect(DbString);
-
+app.post("/v1/estoque", async (req, res) => {
     const Produto = new ProdutoModel(request.body);
 
     try {
@@ -44,9 +48,7 @@ app.post("/v1/estoque", (req, res) => {
     }    
 })
 
-app.put("/v1/estoque", (req, res) => {
-    await mongoose.connect(DbString);
-
+app.put("/v1/estoque", async (req, res) => {
     try {
         await ProdutoModel.findByIdAndUpdate(request.params.id, request.body);
         await ProdutoModel.save();
@@ -56,9 +58,7 @@ app.put("/v1/estoque", (req, res) => {
       }
 })
 
-app.delete("/v1/estoque/:id", (req, res) => {
-    await mongoose.connect(DbString);
-
+app.delete("/v1/estoque/:id", async (req, res) => {
     try {
         const food = await ProdutoModel.findByIdAndDelete(request.params.id);
     
@@ -69,6 +69,6 @@ app.delete("/v1/estoque/:id", (req, res) => {
       }
 })
 
-app.listen(3000, () => {
+app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
