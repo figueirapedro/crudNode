@@ -10,11 +10,11 @@ const port = 3000;
 const DbString = "mongodb://127.0.0.1:27017";
 
 app.get("/listar", () => {
-    res.sendFile(path.join(__dirname + "/static/x.html"));
+    res.sendFile(path.join(__dirname + "/static/CRUDTable.html"));
 })
 
 app.get("/cadastrar", () => {
-    res.sendFile(path.join(__dirname + "/static/x.html"));
+    res.sendFile(path.join(__dirname + "/static/CRUDNode.html"));
 })
 
 app.get("/atualizar", () => {
